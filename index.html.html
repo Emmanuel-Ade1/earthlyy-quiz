@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Earthlyy Match</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#3E7A5A; --green-mid:#6BAA86; --green-soft:#E3F1E7;
+    --pink:#E08AA3; --rose:#B8506E; --pink-soft:#FBE4EA; --blush:#FDF0F3;
+    --ink:#2E4A3B; --white:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Nunito",system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--green-soft) 0%,var(--blush) 100%);min-height:100vh;display:flex;justify-content:center;padding:28px 16px 40px}
+  .wrap{width:100%;max-width:480px}
+  .brand{text-align:center;margin-bottom:22px}
+  .brand .name{font-family:"DM Serif Display",serif;font-size:30px;letter-spacing:.5px}
+  .brand .name span{color:var(--rose)}
+  .brand .tag{font-style:italic;color:var(--green);font-size:15px;margin-top:2px}
+  .card{background:var(--white);border-radius:22px;padding:26px 22px;box-shadow:0 8px 28px rgba(46,74,59,.10)}
+  .progress{display:flex;gap:6px;margin-bottom:20px}
+  .progress i{flex:1;height:6px;border-radius:6px;background:var(--green-soft)}
+  .progress i.on{background:var(--pink)}
+  .step{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--rose);text-transform:uppercase;margin-bottom:6px}
+  h1{font-family:"DM Serif Display",serif;font-weight:400;font-size:26px;line-height:1.2;margin-bottom:18px}
+  .opts{display:grid;gap:10px}
+  button.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;font-size:16px;font-weight:600;color:var(--ink);background:var(--green-soft);border:2px solid transparent;border-radius:14px;padding:14px 16px;cursor:pointer;transition:transform .12s,border-color .12s,background .12s}
+  button.opt:nth-child(even){background:var(--pink-soft)}
+  button.opt:hover{border-color:var(--green-mid);transform:translateY(-1px)}
+  button.opt:active{transform:scale(.98)}
+  .emoji{font-size:22px;width:30px;text-align:center}
+  .intro p{font-size:16px;line-height:1.5;margin-bottom:20px}
+  .btn{display:block;width:100%;font:inherit;font-weight:700;font-size:17px;color:#fff;background:var(--green);border:0;border-radius:14px;padding:15px;cursor:pointer}
+  .btn.alt{background:var(--white);color:var(--green);border:2px solid var(--green-mid);margin-top:10px}
+  .result .badge{display:inline-block;background:var(--pink-soft);color:var(--rose);font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:20px;margin-bottom:12px}
+  .result h1{margin-bottom:6px}
+  .result .line{color:var(--green);font-weight:700;margin-bottom:16px}
+  .result p{line-height:1.5;margin-bottom:16px}
+  .pick{border-radius:14px;padding:14px 16px;margin-bottom:10px}
+  .pick.g{background:var(--green-soft)} .pick.p{background:var(--pink-soft)}
+  .pick small{display:block;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:2px}
+  .pick.p small{color:var(--rose)}
+  .pick b{font-size:16px}
+  .pick .price{float:right;font-weight:700;color:var(--rose)}
+  .bottle{margin-top:14px;font-size:14px;background:var(--blush);border:1.5px dashed var(--pink);border-radius:14px;padding:12px 14px}
+  footer{text-align:center;font-size:13px;color:var(--green);margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="name">E4RTHLYY <span>ESS3NCE</span></div>
+    <div class="tag">Your Natural Beauty Sanctuary</div>
+  </div>
+  <div class="card" id="app"></div>
+  <footer>Surulere, Lagos · Earthlyy Retreat Spa</footer>
+</div>
+<script>
+const Q = [
+  { q: "How does your skin usually feel?", o: [
+    ["💧","Dry or tight","body"], ["✨","Oily or shiny","skin"], ["🌗","A bit of both","skin"], ["🌿","Pretty balanced","bath"] ]},
+  { q: "What do you want to care for most?", o: [
+    ["💋","My lips","lip"], ["🧴","My skin & body","body"], ["💇🏾","My hair","hair"], ["💅🏾","My hands & feet","spa"] ]},
+  { q: "Pick your favourite scent", o: [
+    ["🌸","Floral & sweet","lip"], ["🍋","Fresh citrus","bath"], ["🥥","Coconut & shea","hair"], ["🌱","Earthy & herbal","skin"] ]},
+  { q: "Your perfect self-care day is…", o: [
+    ["🛁","A long relaxing bath","bath"], ["🧖🏾","A spa visit","spa"], ["🎁","Treating someone with a gift","gift"], ["⚡","Quick & simple routine","lip"] ]},
+];
+const R = {
+  lip:  { t:"The Glow Lips", l:"Earthlyy Skin · Lip care", d:"You love easy, everyday care that makes a big difference. Soft, smooth lips are your signature.", p:["Lip scrub + lip balm duo","₦2,000 – ₦6,000"], s:["Beauty Consultation","Free with purchase"] },
+  body: { t:"The Deep Moisture", l:"Earthlyy Skin · Body care", d:"Your skin is craving rich hydration. Whipped body butters and oils will keep you glowing all day.", p:["Whipped body butter","₦4,000 – ₦15,000"], s:["Mini Spa Treatment","₦10,000 – ₦25,000"] },
+  skin: { t:"The Clear Balance", l:"Earthlyy Skin · Skincare", d:"You want fresh, clean, balanced skin. A gentle routine plus a professional facial is your perfect match.", p:["Cleanser + toner set","₦5,000 – ₦18,000"], s:["Facial Care","₦12,000 – ₦30,000"] },
+  bath: { t:"The Soak & Unwind", l:"Earthlyy Skin · Bath products", d:"Bath time is your me-time. Scrubs, salts and bath bombs turn your bathroom into a sanctuary.", p:["Body scrub + bath salts","₦3,000 – ₦10,000"], s:["Mini Spa Treatment","₦10,000 – ₦25,000"] },
+  hair: { t:"The Crown Care", l:"Earthlyy Skin · Hair care", d:"Your hair deserves love. Nourishing oils and butters keep it soft, moisturised and strong.", p:["Hair oil + hair butter","₦3,500 – ₦12,000"], s:["Hair Care & Styling","₦5,000 – ₦20,000"] },
+  spa:  { t:"The Pamper Pro", l:"Earthlyy Retreat · Spa", d:"You deserve to be pampered. Let our team take care of your hands and feet while you relax.", p:["Hand & foot cream","₦4,000 – ₦15,000"], s:["Manicure & Pedicure","₦5,000 – ₦15,000"] },
+  gift: { t:"The Gift Giver", l:"Earthlyy Essentials", d:"You show love through thoughtful gifts. Build a custom beauty box with your choice of products, scent and packaging.", p:["Custom beauty box","₦15,000 – ₦60,000"], s:["Gift Packaging","₦2,000 – ₦8,000"] },
+};
+const app = document.getElementById("app");
+let step = -1, score = {};
+
+function intro(){
+  app.innerHTML = `<div class="intro"><div class="step">Earthlyy Skin Quiz</div>
+    <h1>Find your perfect Earthlyy match 🌿</h1>
+    <p>Answer 4 quick questions and we'll recommend the product and spa service made for you.</p>
+    <button class="btn" id="go">Start the quiz</button></div>`;
+  document.getElementById("go").onclick = () => { step = 0; score = {}; question(); };
+}
+function question(){
+  const item = Q[step];
+  const bars = Q.map((_,i)=>`<i class="${i<=step?'on':''}"></i>`).join("");
+  app.innerHTML = `<div class="progress">${bars}</div>
+    <div class="step">Question ${step+1} of ${Q.length}</div>
+    <h1>${item.q}</h1>
+    <div class="opts">${item.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="emoji">${o[0]}</span>${o[1]}</button>`).join("")}</div>`;
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    const k = item.o[+b.dataset.i][2];
+    score[k] = (score[k]||0) + 1 + (step===1 ? 0.5 : 0); // the "care for most" answer counts a bit more
+    step++;
+    step < Q.length ? question() : result();
+  });
+}
+function result(){
+  const key = Object.keys(score).sort((a,b)=>score[b]-score[a])[0];
+  const r = R[key];
+  app.innerHTML = `<div class="result"><div class="badge">Your Earthlyy match</div>
+    <h1>${r.t}</h1><div class="line">${r.l}</div><p>${r.d}</p>
+    <div class="pick g"><span class="price">${r.p[1]}</span><small>Product for you</small><b>${r.p[0]}</b></div>
+    <div class="pick p"><span class="price">${r.s[1]}</span><small>Treat yourself to</small><b>${r.s[0]}</b></div>
+    <div class="bottle">♻️ <b>Bring Back Your Bottle:</b> return your empty jar and get a discount on your next purchase.</div>
+    <button class="btn alt" id="again">Take the quiz again</button></div>`;
+  document.getElementById("again").onclick = intro;
+}
+intro();
+</script>
+</body>
+</html>
